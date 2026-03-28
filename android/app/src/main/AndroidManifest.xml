@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="xiaoxiao_study"
+        android:label="小小学霸"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

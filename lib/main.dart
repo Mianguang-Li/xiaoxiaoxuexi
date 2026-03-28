@@ -6,67 +6,167 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Study',
+      title: '小小学霸',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: SplashPage(),
     );
   }
 }
 
-class Question {
-  final String q;
-  final List<String> o;
-  final String a;
-  Question(this.q, this.o, this.a);
-}
-
-class HomePage extends StatefulWidget {
+// 开屏页
+class SplashPage extends StatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _grade = 1;
-  int _subject = 0;
-  final _subjects = ['Chinese', 'Math', 'English'];
-  final List<List<Question>> _bank = [
-    [
-      Question('A is initial?', ['a','o','e','i'], 'a'),
-      Question('tian=4?', ['2','3','4','5'], '4'),
-      Question('da-xiao?', ['shang','xia','xiao','zuo'], 'xiao'),
-    ],
-    [
-      Question('1+2=?', ['2','3','4','5'], '3'),
-      Question('>3?', ['1','2','3','4'], '4'),
-      Question('3x4=?', ['7','10','12','14'], '12'),
-    ],
-    [
-      Question('A->a?', ['a','b','c','d'], 'a'),
-      Question('apple?', ['banana','apple','orange','grape'], 'apple'),
-      Question('cat/dog?', ['dog/cat','cat/dog','fish/bird','pig/rabbit'], 'cat/dog'),
-    ],
-  ];
+class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => StageSelectPage()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Study [_subject]')),
-      body: Column(
-        children: [
-          Text('Grade: '),
-          Wrap(children: [1,2,3,4,5,6].map((g) => GestureDetector(
-            onTap: () => setState(() => _grade = g),
-            child: Container(
-              margin: EdgeInsets.all(4),
-              padding: EdgeInsets.all(8),
-              color: _grade == g ? Colors.blue : Colors.grey,
-              child: Text('G', style: TextStyle(color: Colors.white)),
+      backgroundColor: Colors.blue[700],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.school, size: 100, color: Colors.white),
+            SizedBox(height: 20),
+            Text(
+              '小小学霸',
+              style: TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-          )).toList()),
-          Expanded(child: Container()),
-          ElevatedButton(
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StudyPage(_subjects[_subject], _grade, _bank[_subject]))),
-            child: Text('START'),
+            SizedBox(height: 10),
+            Text(
+              '让学习更有趣！',
+              style: TextStyle(fontSize: 18, color: Colors.white70),
+            ),
+            SizedBox(height: 40),
+            Text(
+              '阿绵创意工坊',
+              style: TextStyle(fontSize: 14, color: Colors.white60),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ========== 学习阶段选择页 ==========
+class StageSelectPage extends StatelessWidget {
+  void _goToStage(BuildContext context, String stage) {
+    if (stage == '小学') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => PrimarySchoolPage()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => MiddleSchoolPage()),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('小小学霸'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () => _showAbout(context),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(24),
+        child: Column(
+          children: [
+            SizedBox(height: 30),
+            Icon(Icons.school, size: 80, color: Colors.blue[300]),
+            SizedBox(height: 40),
+            Text(
+              '请选择学习阶段',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 40),
+            // 小学按钮
+            _StageButton(
+              label: '小学',
+              subLabel: '一至六年级',
+              icon: Icons.child_care,
+              color: Colors.blue,
+              onTap: () => _goToStage(context, '小学'),
+            ),
+            SizedBox(height: 20),
+            // 初中按钮
+            _StageButton(
+              label: '初中',
+              subLabel: '七至九年级',
+              icon: Icons.auto_stories,
+              color: Colors.orange,
+              onTap: () => _goToStage(context, '初中'),
+            ),
+            Expanded(child: Container()),
+            Text('阿绵创意工坊', style: TextStyle(fontSize: 12, color: Colors.grey)),
+            SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAbout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(children: [
+          Icon(Icons.school, color: Colors.blue),
+          SizedBox(width: 8),
+          Text('关于我们'),
+        ]),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('小小学霸是一款专为学生打造的学习助手。'),
+            SizedBox(height: 12),
+            Text('支持小学、初中多个年级，涵盖语文、数学、英语等多门学科，让学习变得更有趣！'),
+            SizedBox(height: 16),
+            Row(children: [
+              Icon(Icons.business, size: 16, color: Colors.grey[600]),
+              SizedBox(width: 8),
+              Text('阿绵创意工坊', style: TextStyle(fontWeight: FontWeight.bold)),
+            ]),
+            SizedBox(height: 8),
+            Row(children: [
+              Icon(Icons.email, size: 16, color: Colors.grey[600]),
+              SizedBox(width: 8),
+              Text('mianguang@163.com', style: TextStyle(color: Colors.blue[700])),
+            ]),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('知道了'),
           ),
         ],
       ),
@@ -74,11 +174,525 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class _StageButton extends StatelessWidget {
+  final String label;
+  final String subLabel;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  _StageButton({
+    required this.label,
+    required this.subLabel,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(color: color.withOpacity(0.3), blurRadius: 8, offset: Offset(0, 4)),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 50, color: Colors.white),
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                      fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+                Text(subLabel, style: TextStyle(fontSize: 14, color: Colors.white70)),
+              ],
+            ),
+            Spacer(),
+            Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ========== 小学首页 ==========
+class PrimarySchoolPage extends StatefulWidget {
+  @override
+  State<PrimarySchoolPage> createState() => _PrimarySchoolPageState();
+}
+
+class _PrimarySchoolPageState extends State<PrimarySchoolPage> {
+  int _grade = 1;
+  int _subject = 0;
+  final _subjects = ['语文', '数学', '英语'];
+
+  final _gradeNames = ['一', '二', '三', '四', '五', '六'];
+
+  final List<List<List<dynamic>>> _bank = [
+    [
+      ['a 的发音是什么？', ['a', 'o', 'e', 'i'], 'a'],
+      ['天 字有几笔？', ['2', '3', '4', '5'], '4'],
+      ['大 小 上 下 中，哪个表示小？', ['上', '下', '小', '左'], '小'],
+    ],
+    [
+      ['1 + 2 = ?', ['2', '3', '4', '5'], '3'],
+      ['比 3 大的数是？', ['1', '2', '3', '4'], '4'],
+      ['3 × 4 = ?', ['7', '10', '12', '14'], '12'],
+    ],
+    [
+      ['大写 A 对应的小写字母是？', ['a', 'b', 'c', 'd'], 'a'],
+      ['apple 中文意思是？', ['香蕉', '苹果', '橙子', '葡萄'], '苹果'],
+      ['cat 中文意思是？', ['小狗', '小猫', '小鱼', '小鸟'], '小猫'],
+    ],
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('小小学霸 · 小学'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () => _showAbout(context),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 20),
+          Text('选择科目', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+          Wrap(children: [
+            for (int i = 0; i < _subjects.length; i++)
+              GestureDetector(
+                onTap: () => setState(() => _subject = i),
+                child: Container(
+                  margin: EdgeInsets.all(4),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: _subject == i ? Colors.blue : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(_subjects[i],
+                      style: TextStyle(
+                          color: _subject == i ? Colors.white : Colors.black87, fontSize: 16)),
+                ),
+              ),
+          ]),
+          SizedBox(height: 30),
+          Icon(Icons.school, size: 80, color: Colors.blue[300]),
+          SizedBox(height: 30),
+          Text('选择年级', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+          Wrap(children: [
+            for (int g = 1; g <= 6; g++)
+              GestureDetector(
+                onTap: () => setState(() => _grade = g),
+                child: Container(
+                  margin: EdgeInsets.all(4),
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: _grade == g ? Colors.blue : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Center(
+                    child: Text(_gradeNames[g - 1],
+                        style: TextStyle(
+                            color: _grade == g ? Colors.white : Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ),
+          ]),
+          Expanded(child: Container()),
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: ElevatedButton(
+              onPressed: () => _startStudy(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+              ),
+              child: Text('开始学习', style: TextStyle(fontSize: 20, color: Colors.white)),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Text('阿绵创意工坊', style: TextStyle(fontSize: 12, color: Colors.grey)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _startStudy(BuildContext context) {
+    final questions = _bank[_subject]
+        .map((q) => Question(q[0] as String, List<String>.from(q[1]), q[2] as String))
+        .toList();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => StudyPage('${_subjects[_subject]} · ${_gradeNames[_grade - 1]}年级', questions),
+      ),
+    );
+  }
+
+  void _showAbout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(children: [
+          Icon(Icons.school, color: Colors.blue),
+          SizedBox(width: 8),
+          Text('关于我们'),
+        ]),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('小小学霸是一款专为学生打造的学习助手。'),
+            SizedBox(height: 12),
+            Text('支持小学、初中多个年级，涵盖语文、数学、英语等多门学科，让学习变得更有趣！'),
+            SizedBox(height: 16),
+            Row(children: [
+              Icon(Icons.business, size: 16, color: Colors.grey[600]),
+              SizedBox(width: 8),
+              Text('阿绵创意工坊', style: TextStyle(fontWeight: FontWeight.bold)),
+            ]),
+            SizedBox(height: 8),
+            Row(children: [
+              Icon(Icons.email, size: 16, color: Colors.grey[600]),
+              SizedBox(width: 8),
+              Text('mianguang@163.com', style: TextStyle(color: Colors.blue[700])),
+            ]),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('知道了'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ========== 初中首页 ==========
+class MiddleSchoolPage extends StatefulWidget {
+  @override
+  State<MiddleSchoolPage> createState() => _MiddleSchoolPageState();
+}
+
+class _MiddleSchoolPageState extends State<MiddleSchoolPage> {
+  int _grade = 7;
+  int _subject = 0;
+
+  final _gradeNames = {7: '七', 8: '八', 9: '九'};
+
+  final Map<int, List<String>> _subjectsMap = {
+    7: ['数学', '语文', '英语', '政治', '地理', '生物', '历史'],
+    8: ['数学', '语文', '英语', '政治', '地理', '生物', '历史', '物理'],
+    9: ['数学', '语文', '英语', '政治', '历史', '物理', '化学'],
+  };
+
+  // 七年级题库：数学、语文、英语、政治、地理、生物、历史
+  final Map<int, List<List<List<dynamic>>>> _bankMap = {
+    7: [
+      [
+        ['化简：2x + 3x = ?', ['4x', '5x', '6x', '5'], '5x'],
+        ['(-2) × (-3) = ?', ['-6', '6', '-5', '5'], '6'],
+        ['0.5 = ?%', ['50%', '5%', '0.5%', '500%'], '50%'],
+      ],
+      [
+        ['《静夜思》作者是？', ['李白', '杜甫', '白居易', '王维'], '李白'],
+        ['举头望明月下一句是？', ['低头思故乡', '明月几时有', '月是故乡明', '千里共婵娟'], '低头思故乡'],
+        ['汉字大有几笔？', ['2', '3', '4', '1'], '3'],
+      ],
+      [
+        ['hello 的中文意思是？', ['你好', '再见', '谢谢', '好的'], '你好'],
+        ['cat 的中文意思是？', ['小狗', '小猫', '小鱼', '小鸟'], '小猫'],
+        ['大写B对应的小写是？', ['a', 'b', 'c', 'd'], 'b'],
+      ],
+      [
+        ['我国最高国家权力机关是？', ['全国人民代表大会', '国务院', '国家主席', '最高人民法院'], '全国人民代表大会'],
+        ['公民最基本的权利是？', ['监督权', '选举权', '人身自由权', '受教育权'], '人身自由权'],
+        ['社会主义核心价值观个人层面是？', ['富强民主', '文明和谐', '爱国敬业诚信友善', '自由平等'], '爱国敬业诚信友善'],
+      ],
+      [
+        ['世界最大的大洋是？', ['太平洋', '大西洋', '印度洋', '北冰洋'], '太平洋'],
+        ['中国面积最大的省是？', ['新疆', '西藏', '内蒙古', '青海'], '新疆'],
+        ['赤道周长约多少公里？', ['4万', '5万', '6万', '3万'], '4万'],
+      ],
+      [
+        ['植物光合作用需要什么？', ['阳光', '土壤', '肥料', '温度'], '阳光'],
+        ['人体最大的器官是？', ['皮肤', '肝脏', '心脏', '大脑'], '皮肤'],
+        ['水的化学式是？', ['H2O', 'CO2', 'O2', 'H2'], 'H2O'],
+      ],
+      [
+        ['中国第一个封建王朝是？', ['秦', '汉', '夏', '周'], '秦'],
+        ['三国不包括哪个国家？', ['魏', '蜀', '吴', '燕'], '燕'],
+        ['丝绸之路的起点是？', ['长安', '洛阳', '敦煌', '乌鲁木齐'], '长安'],
+      ],
+    ],
+    // 八年级题库
+    8: [
+      [
+        ['解方程：2x = 10', ['x=4', 'x=5', 'x=6', 'x=3'], 'x=5'],
+        ['三角形内角和是？', ['90°', '180°', '270°', '360°'], '180°'],
+        ['(-1) + (-2) = ?', ['-3', '3', '-1', '1'], '-3'],
+      ],
+      [
+        ['《岳阳楼记》作者是？', ['范仲淹', '欧阳修', '苏轼', '王安石'], '范仲淹'],
+        ['先天下之忧而忧下一句是？', ['后天下之乐而乐', '天下兴亡匹夫有责', '位卑未敢忘忧国', '人生自古谁无死'], '后天下之乐而乐'],
+        ['说明文的主要特征是？', ['抒情', '叙事', '客观说明', '议论'], '客观说明'],
+      ],
+      [
+        ['good morning 中文是？', ['早上好', '晚安', '你好', '再见'], '早上好'],
+        ['study 的中文意思是？', ['学习', '玩耍', '睡觉', '吃饭'], '学习'],
+        ['一般疑问句用什么引导？', ['Do/Does', 'What', 'Who', 'Where'], 'Do/Does'],
+      ],
+      [
+        ['人民代表大会制度的组织原则是？', ['民主集中制', '三权分立', '联邦制', '邦联制'], '民主集中制'],
+        ['公民满多少岁有选举权？', ['16', '18', '20', '14'], '18'],
+        ['维护国家安全义务不包括？', ['向敌人出卖情报', '提供便利条件', '协助侦查', '保守秘密'], '向敌人出卖情报'],
+      ],
+      [
+        ['世界最高峰是？', ['珠穆朗玛峰', '乔戈里峰', '干城章嘉峰', '洛子峰'], '珠穆朗玛峰'],
+        ['北纬23.5°叫做什么？', ['北回归线', '南回归线', '赤道', '北极圈'], '北回归线'],
+        ['地球自转方向是？', ['自西向东', '自东向西', '自南向北', '自北向南'], '自西向东'],
+      ],
+      [
+        ['植物细胞特有的结构是？', ['细胞壁', '细胞核', '细胞膜', '叶绿体'], '叶绿体'],
+        ['人体红细胞的功能是？', ['运输氧气', '抵抗疾病', '止血', '调节体温'], '运输氧气'],
+        ['光的折射定律中，入射角和折射角的关系？', ['成正比', '成反比', '满足斯涅尔定律', '无关'], '满足斯涅尔定律'],
+      ],
+      [
+        ['唐朝建立于哪一年？', ['618年', '581年', '907年', '712年'], '618年'],
+        ['科举制度正式确立于哪个朝代？', ['隋朝', '唐朝', '宋朝', '明朝'], '隋朝'],
+        ['《史记》的作者是？', ['司马迁', '司马光', '班固', '陈寿'], '司马迁'],
+      ],
+      [
+        ['速度公式 v = s/t，其中 s 表示？', ['路程', '时间', '速度', '加速度'], '路程'],
+        ['水的密度是？', ['1g/cm3', '0.8g/cm3', '1.5g/cm3', '2g/cm3'], '1g/cm3'],
+        ['大气压随海拔升高而如何变化？', ['降低', '升高', '不变', '先升后降'], '降低'],
+      ],
+    ],
+    // 九年级题库
+    9: [
+      [
+        ['抛物线 y = x2 的对称轴是？', ['x=0', 'y=0', 'y=x', 'x=1'], 'x=0'],
+        ['若方程 x2 = 4，则 x = ?', ['±2', '2', '-2', '4'], '±2'],
+        ['直角三角形两直角边为3和4，斜边是？', ['5', '6', '7', '4'], '5'],
+      ],
+      [
+        ['《孔乙己》作者是？', ['鲁迅', '茅盾', '老舍', '巴金'], '鲁迅'],
+        ['《诗经》分为哪三部分？', ['风雅颂', '赋比兴', '古今体', '正变'], '风雅颂'],
+        ['春蚕到死丝方尽下一句是？', ['蜡炬成灰泪始干', '化作春泥更护花', '落红不是无情物', '零落成泥碾作尘'], '蜡炬成灰泪始干'],
+      ],
+      [
+        ['goodbye 中文意思是？', ['再见', '你好', '对不起', '谢谢'], '再见'],
+        ['被动语态 be + ? + by', ['过去分词', '现在分词', '动词原形', '动名词'], '过去分词'],
+        ['If I were you, I would... 是什么语气？', ['虚拟语气', '条件状语', '定语从句', '名词性从句'], '虚拟语气'],
+      ],
+      [
+        ['我国根本政治制度是？', ['人民代表大会制度', '中国共产党领导的多党合作制', '民族区域自治', '基层群众自治'], '人民代表大会制度'],
+        ['公民依法服兵役是履行什么义务？', ['国防义务', '纳税义务', '劳动义务', '受教育义务'], '国防义务'],
+        ['社会主义法治的根本保证是？', ['党的领导', '人民当家作主', '依法治国', '司法独立'], '党的领导'],
+      ],
+      [
+        ['中国近代史的开端是？', ['鸦片战争', '甲午战争', '辛亥革命', '五四运动'], '鸦片战争'],
+        ['抗日战争中牺牲的最高将领是？', ['张自忠', '佟麟阁', '赵登禹', '谢晋元'], '张自忠'],
+        ['新中国成立于哪一年？', ['1949年', '1945年', '1950年', '1951年'], '1949年'],
+      ],
+      [
+        ['能量守恒定律内容是？', ['能量既不会凭空产生也不会凭空消失', '能量可以随意转换', '能量会逐渐减少', '能量会逐渐增加'], '能量既不会凭空产生也不会凭空消失'],
+        ['欧姆定律公式是？', ['I = U/R', 'P = UI', 'W = Pt', 'F = ma'], 'I = U/R'],
+        ['物态变化中，熔化需要？', ['吸热', '放热', '不变', '先吸热后放热'], '吸热'],
+      ],
+      [
+        ['盐酸的化学式是？', ['HCl', 'H2SO4', 'HNO3', 'NaOH'], 'HCl'],
+        ['Fe与稀盐酸反应生成？', ['FeCl2 + H2', 'FeCl3 + H2', 'FeO + H2', 'Fe(OH)3 + H2'], 'FeCl2 + H2'],
+        ['燃烧需要满足三个条件，灭火可采取？', ['隔绝空气或降温至着火点以下', '增加氧气', '提高温度', '移除可燃物同时增加氧气'], '隔绝空气或降温至着火点以下'],
+      ],
+    ],
+  };
+
+  List<String> get _currentSubjects => _subjectsMap[_grade] ?? [];
+
+  List<List<List<dynamic>>> get _currentBank => _bankMap[_grade] ?? [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('小小学霸 · 初中'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () => _showAbout(context),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 20),
+          Text('选择年级', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+          Wrap(children: [
+            for (int g in [7, 8, 9])
+              GestureDetector(
+                onTap: () => setState(() {
+                  _grade = g;
+                  _subject = 0;
+                }),
+                child: Container(
+                  margin: EdgeInsets.all(4),
+                  width: 60,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: _grade == g ? Colors.orange : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${_gradeNames[g]}年级',
+                      style: TextStyle(
+                          color: _grade == g ? Colors.white : Colors.black87,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+          ]),
+          SizedBox(height: 30),
+          Icon(Icons.school, size: 80, color: Colors.orange[300]),
+          SizedBox(height: 30),
+          Text('选择科目', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+          Wrap(children: [
+            for (int i = 0; i < _currentSubjects.length; i++)
+              GestureDetector(
+                onTap: () => setState(() => _subject = i),
+                child: Container(
+                  margin: EdgeInsets.all(4),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: _subject == i ? Colors.orange : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(_currentSubjects[i],
+                      style: TextStyle(
+                          color: _subject == i ? Colors.white : Colors.black87, fontSize: 14)),
+                ),
+              ),
+          ]),
+          Expanded(child: Container()),
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: ElevatedButton(
+              onPressed: () => _startStudy(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+              ),
+              child: Text('开始学习', style: TextStyle(fontSize: 20, color: Colors.white)),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Text('阿绵创意工坊', style: TextStyle(fontSize: 12, color: Colors.grey)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _startStudy(BuildContext context) {
+    final subject = _currentSubjects[_subject];
+    final bank = _currentBank[_subject];
+    final questions = bank
+        .map((q) => Question(q[0] as String, List<String>.from(q[1]), q[2] as String))
+        .toList();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => StudyPage('${subject} · ${_gradeNames[_grade]}年级', questions),
+      ),
+    );
+  }
+
+  void _showAbout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Row(children: [
+          Icon(Icons.school, color: Colors.blue),
+          SizedBox(width: 8),
+          Text('关于我们'),
+        ]),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('小小学霸是一款专为学生打造的学习助手。'),
+            SizedBox(height: 12),
+            Text('支持小学、初中多个年级，涵盖语文、数学、英语等多门学科，让学习变得更有趣！'),
+            SizedBox(height: 16),
+            Row(children: [
+              Icon(Icons.business, size: 16, color: Colors.grey[600]),
+              SizedBox(width: 8),
+              Text('阿绵创意工坊', style: TextStyle(fontWeight: FontWeight.bold)),
+            ]),
+            SizedBox(height: 8),
+            Row(children: [
+              Icon(Icons.email, size: 16, color: Colors.grey[600]),
+              SizedBox(width: 8),
+              Text('mianguang@163.com', style: TextStyle(color: Colors.blue[700])),
+            ]),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('知道了'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ========== 题目页 ==========
+class Question {
+  final String q;
+  final List<String> o;
+  final String a;
+  Question(this.q, this.o, this.a);
+}
+
 class StudyPage extends StatefulWidget {
-  final String subject;
-  final int grade;
+  final String title;
   final List<Question> questions;
-  StudyPage(this.subject, this.grade, this.questions);
+  StudyPage(this.title, this.questions);
   @override
   State<StudyPage> createState() => _StudyPageState();
 }
@@ -102,40 +716,80 @@ class _StudyPageState extends State<StudyPage> {
     if (_i < widget.questions.length - 1) {
       setState(() { _i++; _selected = null; _show = false; });
     } else {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ResultPage(_correct, widget.questions.length)));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ResultPage(_correct, widget.questions.length),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var q = widget.questions[_i];
+    final q = widget.questions[_i];
     return Scaffold(
-      appBar: AppBar(title: Text(' G')),
+      appBar: AppBar(title: Text(widget.title), centerTitle: true),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LinearProgressIndicator(value: (_i+1)/widget.questions.length),
-            SizedBox(height: 16),
-            Text(q.q, style: TextStyle(fontSize: 20)),
-            SizedBox(height: 16),
-            ...q.o.map((o) => Padding(
-              padding: EdgeInsets.only(bottom: 8),
-              child: GestureDetector(
-                onTap: () => _check(o),
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: _show ? (o==q.a ? Colors.green[100] : (o==_selected ? Colors.red[100] : Colors.white)) : Colors.white,
-                    border: Border.all(color: _show ? (o==q.a ? Colors.green : (o==_selected ? Colors.red : Colors.grey)) : Colors.grey),
-                  ),
-                  child: Text(o),
+            Row(children: [
+              Expanded(
+                child: LinearProgressIndicator(
+                  value: (_i + 1) / widget.questions.length,
                 ),
               ),
-            )).toList(),
-            if (_show) ElevatedButton(onPressed: _next, child: Text(_i < widget.questions.length - 1 ? 'NEXT' : 'RESULT')),
+              SizedBox(width: 10),
+              Text('${_i + 1}/${widget.questions.length}'),
+            ]),
+            SizedBox(height: 20),
+            Text(q.q, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            ...q.o.map((o) => Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: GestureDetector(
+                    onTap: () => _check(o),
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: _show
+                            ? (o == q.a
+                                ? Colors.green[100]
+                                : (o == _selected ? Colors.red[100] : Colors.white))
+                            : Colors.white,
+                        border: Border.all(
+                          color: _show
+                              ? (o == q.a
+                                  ? Colors.green
+                                  : (o == _selected ? Colors.red : Colors.grey))
+                              : Colors.grey,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(o, style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                )),
+            Spacer(),
+            if (_show)
+              Center(
+                child: ElevatedButton(
+                  onPressed: _next,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  ),
+                  child: Text(
+                    _i < widget.questions.length - 1 ? '下一题' : '查看成绩',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            SizedBox(height: 20),
           ],
         ),
       ),
@@ -143,24 +797,67 @@ class _StudyPageState extends State<StudyPage> {
   }
 }
 
+// ========== 结果页 ==========
 class ResultPage extends StatelessWidget {
   final int correct;
   final int total;
   ResultPage(this.correct, this.total);
+
   @override
   Widget build(BuildContext context) {
     double rate = correct / total * 100;
+    String message;
+    IconData icon;
+    if (rate >= 80) {
+      message = '太棒了！';
+      icon = Icons.star;
+    } else if (rate >= 60) {
+      message = '还不错！';
+      icon = Icons.thumb_up;
+    } else {
+      message = '继续加油！';
+      icon = Icons.favorite;
+    }
+
     return Scaffold(
+      appBar: AppBar(
+        title: Text('答题结果'),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(rate >= 80 ? 'GREAT!' : (rate >= 60 ? 'GOOD!' : 'TRY AGAIN!'), style: TextStyle(fontSize: 32)),
+            Icon(icon, size: 80, color: Colors.orange),
             SizedBox(height: 20),
-            Text('Correct:  / '),
-            Text('Rate: %'),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: () => Navigator.pop(context), child: Text('AGAIN')),
+            Text(message, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+            SizedBox(height: 30),
+            Text('正确题数', style: TextStyle(fontSize: 16, color: Colors.grey)),
+            Text(
+              '$correct / $total',
+              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.blue),
+            ),
+            SizedBox(height: 10),
+            Text('正确率', style: TextStyle(fontSize: 16, color: Colors.grey)),
+            Text(
+              '${rate.toStringAsFixed(0)}%',
+              style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: rate >= 60 ? Colors.green : Colors.orange),
+            ),
+            SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              ),
+              child: Text('再来一次', style: TextStyle(fontSize: 18, color: Colors.white)),
+            ),
+            SizedBox(height: 30),
+            Text('阿绵创意工坊', style: TextStyle(fontSize: 12, color: Colors.grey)),
           ],
         ),
       ),

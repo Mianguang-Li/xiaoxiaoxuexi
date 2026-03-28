@@ -274,28 +274,6 @@ class _PrimarySchoolPageState extends State<PrimarySchoolPage> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Text('选择科目', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          Wrap(children: [
-            for (int i = 0; i < _subjects.length; i++)
-              GestureDetector(
-                onTap: () => setState(() => _subject = i),
-                child: Container(
-                  margin: EdgeInsets.all(4),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: _subject == i ? Colors.blue : Colors.grey[300],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(_subjects[i],
-                      style: TextStyle(
-                          color: _subject == i ? Colors.white : Colors.black87, fontSize: 16)),
-                ),
-              ),
-          ]),
-          SizedBox(height: 30),
-          Icon(Icons.school, size: 80, color: Colors.blue[300]),
-          SizedBox(height: 30),
           Text('选择年级', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
           Wrap(children: [
@@ -317,6 +295,28 @@ class _PrimarySchoolPageState extends State<PrimarySchoolPage> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold)),
                   ),
+                ),
+              ),
+          ]),
+          SizedBox(height: 30),
+          Icon(Icons.school, size: 80, color: Colors.blue[300]),
+          SizedBox(height: 30),
+          Text('选择科目', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 10),
+          Wrap(children: [
+            for (int i = 0; i < _subjects.length; i++)
+              GestureDetector(
+                onTap: () => setState(() => _subject = i),
+                child: Container(
+                  margin: EdgeInsets.all(4),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: _subject == i ? Colors.blue : Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(_subjects[i],
+                      style: TextStyle(
+                          color: _subject == i ? Colors.white : Colors.black87, fontSize: 16)),
                 ),
               ),
           ]),

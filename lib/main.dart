@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'grade1_chinese_bank.dart';
 import 'grade1_math_bank.dart';
 import 'grade1_english_bank.dart';
+import 'grade2_chinese_bank.dart';
+import 'grade2_math_bank.dart';
+import 'grade2_english_bank.dart';
 
 void main() => runApp(MyApp());
 
@@ -243,11 +246,16 @@ class _PrimarySchoolPageState extends State<PrimarySchoolPage> {
 
   final _gradeNames = ['一', '二', '三', '四', '五', '六'];
 
-  final List<List<List<dynamic>>> _bank = [
-    grade1ChineseBank,
-    grade1MathBank,
-    grade1EnglishBank,
-  ];
+  List<List<List<dynamic>>> get _bank {
+    switch (_grade) {
+      case 1:
+        return [grade1ChineseBank, grade1MathBank, grade1EnglishBank];
+      case 2:
+        return [grade2ChineseBank, grade2MathBank, grade2EnglishBank];
+      default:
+        return [grade1ChineseBank, grade1MathBank, grade1EnglishBank];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

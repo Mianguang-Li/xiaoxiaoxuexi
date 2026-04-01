@@ -5,6 +5,18 @@ import 'grade1_english_bank.dart';
 import 'grade2_chinese_bank.dart';
 import 'grade2_math_bank.dart';
 import 'grade2_english_bank.dart';
+import 'grade3_chinese_bank.dart';
+import 'grade3_math_bank.dart';
+import 'grade3_english_bank.dart';
+import 'grade4_chinese_bank.dart';
+import 'grade4_math_bank.dart';
+import 'grade4_english_bank.dart';
+import 'grade5_chinese_bank.dart';
+import 'grade5_math_bank.dart';
+import 'grade5_english_bank.dart';
+import 'grade6_chinese_bank.dart';
+import 'grade6_math_bank.dart';
+import 'grade6_english_bank.dart';
 
 void main() => runApp(MyApp());
 
@@ -252,6 +264,14 @@ class _PrimarySchoolPageState extends State<PrimarySchoolPage> {
         return [grade1ChineseBank, grade1MathBank, grade1EnglishBank];
       case 2:
         return [grade2ChineseBank, grade2MathBank, grade2EnglishBank];
+      case 3:
+        return [grade3ChineseBank, grade3MathBank, grade3EnglishBank];
+      case 4:
+        return [grade4ChineseBank, grade4MathBank, grade4EnglishBank];
+      case 5:
+        return [grade5ChineseBank, grade5MathBank, grade5EnglishBank];
+      case 6:
+        return [grade6ChineseBank, grade6MathBank, grade6EnglishBank];
       default:
         return [grade1ChineseBank, grade1MathBank, grade1EnglishBank];
     }

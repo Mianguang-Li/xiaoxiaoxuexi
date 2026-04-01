@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'grade1_chinese_bank.dart';
+import 'grade1_math_bank.dart';
+import 'grade1_english_bank.dart';
 
 void main() => runApp(MyApp());
 
@@ -241,21 +244,9 @@ class _PrimarySchoolPageState extends State<PrimarySchoolPage> {
   final _gradeNames = ['一', '二', '三', '四', '五', '六'];
 
   final List<List<List<dynamic>>> _bank = [
-    [
-      ['a 的发音是什么？', ['a', 'o', 'e', 'i'], 'a'],
-      ['天 字有几笔？', ['2', '3', '4', '5'], '4'],
-      ['大 小 上 下 中，哪个表示小？', ['上', '下', '小', '左'], '小'],
-    ],
-    [
-      ['1 + 2 = ?', ['2', '3', '4', '5'], '3'],
-      ['比 3 大的数是？', ['1', '2', '3', '4'], '4'],
-      ['3 × 4 = ?', ['7', '10', '12', '14'], '12'],
-    ],
-    [
-      ['大写 A 对应的小写字母是？', ['a', 'b', 'c', 'd'], 'a'],
-      ['apple 中文意思是？', ['香蕉', '苹果', '橙子', '葡萄'], '苹果'],
-      ['cat 中文意思是？', ['小狗', '小猫', '小鱼', '小鸟'], '小猫'],
-    ],
+    grade1ChineseBank,
+    grade1MathBank,
+    grade1EnglishBank,
   ];
 
   @override
@@ -342,7 +333,11 @@ class _PrimarySchoolPageState extends State<PrimarySchoolPage> {
   }
 
   void _startStudy(BuildContext context) {
-    final questions = _bank[_subject]
+    final bank = _bank[_subject];
+    // 随机抽取15道题
+    final shuffled = List<List<dynamic>>.from(bank)..shuffle();
+    final picked = shuffled.take(15).toList();
+    final questions = picked
         .map((q) => Question(q[0] as String, List<String>.from(q[1]), q[2] as String))
         .toList();
     Navigator.push(
@@ -629,7 +624,10 @@ class _MiddleSchoolPageState extends State<MiddleSchoolPage> {
   void _startStudy(BuildContext context) {
     final subject = _currentSubjects[_subject];
     final bank = _currentBank[_subject];
-    final questions = bank
+    // 随机抽取15道题
+    final shuffled = List<List<dynamic>>.from(bank)..shuffle();
+    final picked = shuffled.take(15).toList();
+    final questions = picked
         .map((q) => Question(q[0] as String, List<String>.from(q[1]), q[2] as String))
         .toList();
     Navigator.push(

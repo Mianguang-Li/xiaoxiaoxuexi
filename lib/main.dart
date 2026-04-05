@@ -17,6 +17,13 @@ import 'grade5_english_bank.dart';
 import 'grade6_chinese_bank.dart';
 import 'grade6_math_bank.dart';
 import 'grade6_english_bank.dart';
+import 'grade7_chinese_bank.dart';
+import 'grade7_math_bank.dart';
+import 'grade7_english_bank.dart';
+import 'grade7_politics_bank.dart';
+import 'grade7_geography_bank.dart';
+import 'grade7_biology_bank.dart';
+import 'grade7_history_bank.dart';
 
 void main() => runApp(MyApp());
 
@@ -438,41 +445,13 @@ class _MiddleSchoolPageState extends State<MiddleSchoolPage> {
   // 七年级题库：数学、语文、英语、政治、地理、生物、历史
   final Map<int, List<List<List<dynamic>>>> _bankMap = {
     7: [
-      [
-        ['化简：2x + 3x = ?', ['4x', '5x', '6x', '5'], '5x'],
-        ['(-2) × (-3) = ?', ['-6', '6', '-5', '5'], '6'],
-        ['0.5 = ?%', ['50%', '5%', '0.5%', '500%'], '50%'],
-      ],
-      [
-        ['《静夜思》作者是？', ['李白', '杜甫', '白居易', '王维'], '李白'],
-        ['举头望明月下一句是？', ['低头思故乡', '明月几时有', '月是故乡明', '千里共婵娟'], '低头思故乡'],
-        ['汉字大有几笔？', ['2', '3', '4', '1'], '3'],
-      ],
-      [
-        ['hello 的中文意思是？', ['你好', '再见', '谢谢', '好的'], '你好'],
-        ['cat 的中文意思是？', ['小狗', '小猫', '小鱼', '小鸟'], '小猫'],
-        ['大写B对应的小写是？', ['a', 'b', 'c', 'd'], 'b'],
-      ],
-      [
-        ['我国最高国家权力机关是？', ['全国人民代表大会', '国务院', '国家主席', '最高人民法院'], '全国人民代表大会'],
-        ['公民最基本的权利是？', ['监督权', '选举权', '人身自由权', '受教育权'], '人身自由权'],
-        ['社会主义核心价值观个人层面是？', ['富强民主', '文明和谐', '爱国敬业诚信友善', '自由平等'], '爱国敬业诚信友善'],
-      ],
-      [
-        ['世界最大的大洋是？', ['太平洋', '大西洋', '印度洋', '北冰洋'], '太平洋'],
-        ['中国面积最大的省是？', ['新疆', '西藏', '内蒙古', '青海'], '新疆'],
-        ['赤道周长约多少公里？', ['4万', '5万', '6万', '3万'], '4万'],
-      ],
-      [
-        ['植物光合作用需要什么？', ['阳光', '土壤', '肥料', '温度'], '阳光'],
-        ['人体最大的器官是？', ['皮肤', '肝脏', '心脏', '大脑'], '皮肤'],
-        ['水的化学式是？', ['H2O', 'CO2', 'O2', 'H2'], 'H2O'],
-      ],
-      [
-        ['中国第一个封建王朝是？', ['秦', '汉', '夏', '周'], '秦'],
-        ['三国不包括哪个国家？', ['魏', '蜀', '吴', '燕'], '燕'],
-        ['丝绸之路的起点是？', ['长安', '洛阳', '敦煌', '乌鲁木齐'], '长安'],
-      ],
+      grade7MathBank,
+      grade7ChineseBank,
+      grade7EnglishBank,
+      grade7PoliticsBank,
+      grade7GeographyBank,
+      grade7BiologyBank,
+      grade7HistoryBank,
     ],
     // 八年级题库
     8: [
